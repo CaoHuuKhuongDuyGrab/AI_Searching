@@ -1,4 +1,4 @@
-from configg.global_var import *
+from config.global_var import *
 
 class Map:
     def __init__(self, num_rows, num_cols, time_commitment, fuel, matrix = None):
