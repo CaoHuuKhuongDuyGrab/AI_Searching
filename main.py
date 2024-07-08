@@ -1,1 +1,1 @@
-from configg.global_var import *
+from config.global_var import *
