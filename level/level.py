@@ -9,6 +9,7 @@ class Level:
     def print_path(self, path):
         for i in range(len(path)):
             print(path[i], end=" ")
+        print()
 
     def run(self):
         pass
