@@ -1,4 +1,10 @@
-WALL = "-1"
+WALL = -1
+TOOL_BOOTH = 0
+GAS_STATION = 1
+NORMAL_CELL = 2
+SOURCE = 3
+DESTINATION = 4
+oo = 10**11
 
 dx = [0, 0, 1, -1]
 dy = [1, -1, 0, 0]
