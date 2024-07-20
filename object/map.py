@@ -24,6 +24,11 @@ class Map:
             return False
         return True
 
+    def get_cell_value(self, row, col):
+        if is_number(self.matrix[row][col]):
+            return int(self.matrix[row][col])
+        return self.matrix[row][col]
+
     def load_map(self, file_path):
         with open(file_path, "r") as f:
             self.num_rows, self.num_cols, self.time_commitment, self.fuel = map(int, f.readline().split())
