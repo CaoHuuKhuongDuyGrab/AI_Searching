@@ -9,6 +9,7 @@ class Level:
     def print_path(self, path):
         if path == -1:
             print("No path found!")
+            return
         for i in range(len(path)):
             print(path[i], end=" ")
         print()
