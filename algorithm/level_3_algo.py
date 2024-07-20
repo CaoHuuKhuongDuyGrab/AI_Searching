@@ -39,13 +39,16 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
                 #     continue
 
                 move_time = 1
+                fuel_time = 0
                 if cell_type == TOOL_BOOTH:
                     move_time += self.map.get_cell_value(current_x, current_y)
-                new_time = current_time + move_time
 
                 new_fuel = current_fuel - 1
                 if cell_type == GAS_STATION:
                     new_fuel = self.map.fuel
+                    fuel_time = int(self.map.matrix[current_x][current_y][1:])
+                    
+                new_time = current_time + move_time + fuel_time
 
                 if new_fuel <= 0:
                     continue
