@@ -245,30 +245,3 @@ if __name__ == "__main__":
             print("No path found from S to G within the committed time")
         else:
             print("Shortest path from S to G:", shortest_path)
-# if __name__ == "__main__":
-#     file_name = "D://AI_Searching/temp_file/input_lv2.txt"
-#     n, m, t, f, map_data = read_input(file_name)
-#     print("n:", n)
-#     print("m:", m)
-#     print("t:", t)
-#     print("f:", f)
-#     # Find start and goal positions
-#     start = None
-#     goal = None
-#     for i in range(len(map_data)):
-#         for j in range(len(map_data[0])):
-#             if map_data[i][j] == 'S':
-#                 start = (i, j)
-#             elif map_data[i][j] == 'G':
-#                 goal = (i, j)
-    
-#     if start is None or goal is None:
-#         print("Start or goal not found in the map!")
-#     else:
-#         # Find the shortest path using BFS
-#         shortest_path = bfs_shortest_path_with_time_constraint(map_data, start, goal, t)
-        
-#         if shortest_path == "No path found":
-#             print("No path found from S to G")
-#         else:
-#             print("Shortest path from S to G:", shortest_path)
