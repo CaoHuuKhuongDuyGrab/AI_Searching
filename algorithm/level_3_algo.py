@@ -22,6 +22,7 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
         while queue:
             dist, current_x, current_y, current_time, current_fuel = queue.popleft()
             if self.map.cell_type(current_x, current_y) == DESTINATION and current_time <= self.map.time_commitment:
+                print(f"Destination found at ({current_x}, {current_y}) with Time: {current_time}, Fuel: {current_fuel}, Distance: {dist}")
                 return
 
             next_moves = self.map.next_move(current_x, current_y)
@@ -34,19 +35,18 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
                 
                 cell_type = self.map.cell_type(current_x, current_y)
 
-                if not self.map.inside(next_x, next_y): 
-                    continue
+                # if not self.map.inside(next_x, next_y): 
+                #     continue
 
                 move_time = 1
                 if cell_type == TOOL_BOOTH:
                     move_time += self.map.get_cell_value(current_x, current_y)
-
                 new_time = current_time + move_time
 
                 new_fuel = current_fuel - 1
-
                 if cell_type == GAS_STATION:
-                    current_fuel = self.map.fuel   
+                    new_fuel = self.map.fuel
+
                 if new_fuel <= 0:
                     continue
                 if new_time > self.map.time_commitment:
@@ -64,7 +64,7 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
         _time = None
         _fuel = None
         Min = oo
-        print("----")
+
         for _time_ in range(self.map.time_commitment + 1):
             for fuel in range(1, self.map.fuel + 1):
                 if self.distance[current_pos[0]][current_pos[1]][_time_][fuel] < Min:
@@ -73,10 +73,12 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
                     _fuel = fuel
         
         if _time == None:
+            print("Time problem !")
             return -1
         if _fuel == None:
+            print("Fuel problem !")
             return -1
-        print("----")
+        
         # goal state (x, y, _time)
         path = []
         while True:
@@ -87,7 +89,6 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
             current_pos = previous_state[:2]
             _time = previous_state[2]
             _fuel = previous_state[3]
-        print("----")
         path.reverse()
         return path
 
