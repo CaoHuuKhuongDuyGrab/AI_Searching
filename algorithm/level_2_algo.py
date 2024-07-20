@@ -10,8 +10,8 @@ class BFS_With_Time_Constrain(Algorithm):
     def solve(self):
         queue = deque()
         sources = self.map.get_sources()
-        self.distance = [[[oo for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows + 1)]
-        self.trace = [[[None for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows + 1)]
+        self.distance = [[[oo for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols + 1)] for _ in range(self.map.num_rows + 1)]
+        self.trace = [[[None for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols + 1)] for _ in range(self.map.num_rows + 1)]
         for source in sources:
             queue.append((0, source[0], source[1], 0))
             self.distance[source[0]][source[1]][0] = 0
@@ -31,7 +31,8 @@ class BFS_With_Time_Constrain(Algorithm):
                 
                 cell_type = self.map.cell_type(current_x, current_y)
 
-                if not self.map.inside(next_x, next_y): continue
+                if not self.map.inside(next_x, next_y): 
+                    continue
 
                 move_time = 1
                 if cell_type == TOOL_BOOTH:
