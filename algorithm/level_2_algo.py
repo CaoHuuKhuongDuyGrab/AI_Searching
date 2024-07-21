@@ -56,13 +56,6 @@ class BFS_With_Time_Constrain(Algorithm):
             if self.distance[current_pos[0]][current_pos[1]][_time_] < Min:
                 Min = self.distance[current_pos[0]][current_pos[1]][_time_]
                 _time = _time_
-
-        # for _time_ in range(self.map.time_commitment + 1):
-            # for fuel in range(1, self.map.fuel + 1):
-                # if self.distance[current_pos[0]][current_pos[1]][time][fuel] < Min:
-                #     Min = self.distance[current_pos[0]][current_pos[1]][time]
-                #     _time_ = time
-                #     _fuel = fuel
         
         if _time == None:
             return -1
