@@ -64,5 +64,5 @@ class Sidebar:
             for agent in self.map_view.agents:
                 if agent.pathIndex < len(agent.path):       
                     self.map_view.draw_line(agent.path[agent.pathIndex][0], agent.path[agent.pathIndex][1], agent)
-                if agent.pathIndex == len(agent.path):  
-                    print('Game ended')
+                # if agent.pathIndex == len(agent.path):  
+                #     print('Game ended')

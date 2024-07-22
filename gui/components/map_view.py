@@ -65,7 +65,7 @@ class MapView:
 
         self.agents = []
         for i in range (len(solution_path)):
-            agent = Agent(AGENTS_COLOUR[i], solution_path[i], 'S')
+            agent = Agent(AGENTS_COLOUR[0], solution_path[i], 'S')
             self.agents.append(agent)
 
 
@@ -84,11 +84,11 @@ class MapView:
                 elif (str(self.map_data[x][y]).startswith('S')):
                     # self.color_square(x, y, self)
                     # print(self.map_data[x][y])
-                    # for agent in self.agents:
-                        if agent.name == self.map_data[x][y]:
+                    for agent in self.agents:
+                        # if agent.name == self.map_data[x][y]:
                             agent.name = str(self.map_data[x][y])
                             # print(agent.name)
-                            # self.color_square(x, y, agent.colour, agent.name)
+                            self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
                     self.color_square(x, y, PINK, str(self.map_data[x][y]))
                 elif (str(self.map_data[x][y]).startswith('F')):
