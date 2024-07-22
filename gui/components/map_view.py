@@ -6,20 +6,21 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 BLUE = (34, 70, 120)
 LIGHT_GREEN = (173, 255, 219)
-AGENTS_COLOUR = [LIGHT_GREEN, BLACK, RED, BLUE]
 
 
-
+LIGHT_ORANGE = (255, 192, 153)
+LIGHT_PURPLE = (198, 164, 252)
 LIGHT_BLUE = (182, 225, 252)
 LIGHT_YELLOW = (243, 255, 184)
-
-
+LIGHT_BLUE1 = (83, 80, 250)
+HEAVY_BROWN = (125, 26, 26)
 
 GREY = (169, 169, 169)
 NAVY_BLUE = (16, 44, 82)
-BORDER_COLOR = (0, 0, 0)  # Black border for example
+BORDER_COLOR = (0, 0, 0)  
 PINK = (252, 182, 214)
 YELLOW = (230, 207, 108)
+AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, LIGHT_BLUE1, HEAVY_BROWN]
 
 
 
@@ -27,7 +28,6 @@ YELLOW = (230, 207, 108)
 
 
 def read_output(coordinates):
-    # for coordinate in coordinates:
     coord_list = coordinates.strip().split(') ')
     lines = []
     for i in range(len(coord_list) - 1):
@@ -37,7 +37,7 @@ def read_output(coordinates):
     return lines
 
 class Agent:
-    def __init__(self, colour, path, name):
+    def __init__(self, colour, path, name=None):
         self.colour = colour
         self.path = read_output(path)
         self.name = name
@@ -47,14 +47,14 @@ class Agent:
 
 
 class MapView:
-    def __init__(self, screen, x, y, width, height, map_data, solution_path):
+    def __init__(self, screen, x, y, width, height, map_data, number_agents, solution_path):
         self.screen = screen
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.map_data = map_data
-        self.number_usedAgent = 0
+        self.number_agents = number_agents
         self.grid_x = int(width / len(map_data[0]))
         self.grid_y = int(height / len(map_data))
         self.map_surface = pygame.Surface((width, height))
@@ -64,14 +64,18 @@ class MapView:
         self.font = pygame.font.Font(None, 36)  
 
         self.agents = []
-        for i in range (len(solution_path)):
-            agent = Agent(AGENTS_COLOUR[0], solution_path[i], 'S')
-            self.agents.append(agent)
+        for i in range (number_agents):
+            if i < len(solution_path):
+                agent = Agent(AGENTS_COLOUR[i], solution_path[i])
+                agent.name = 'S'
+                if i != 0:
+                    agent.name += str(i)
+                self.agents.append(agent)
 
 
 
     def draw_map(self):
-        self.map_surface.fill(WHITE)  # Fill with white color
+        self.map_surface.fill(WHITE)  
         for x in range(0, self.width, self.grid_x):
             pygame.draw.line(self.map_surface, BORDER_COLOR, (x, 0), (x, self.height))
         for y in range(0, self.height, self.grid_y):
@@ -82,12 +86,8 @@ class MapView:
                 if (self.map_data[x][y] == -1):
                     self.color_square(x, y, BLUE)
                 elif (str(self.map_data[x][y]).startswith('S')):
-                    # self.color_square(x, y, self)
-                    # print(self.map_data[x][y])
                     for agent in self.agents:
-                        # if agent.name == self.map_data[x][y]:
-                            agent.name = str(self.map_data[x][y])
-                            # print(agent.name)
+                        if agent.name == self.map_data[x][y]:
                             self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
                     self.color_square(x, y, PINK, str(self.map_data[x][y]))

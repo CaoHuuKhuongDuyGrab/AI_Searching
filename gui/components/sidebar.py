@@ -41,21 +41,25 @@ class Sidebar:
             if self.is_playing:
                 print("Play started")
                 pygame.time.set_timer(PLAY_EVENT, PLAY_INTERVAL)
+                self.button_Play.update_text("Stop")
             else:
                 print("Play stopped")
                 pygame.time.set_timer(PLAY_EVENT, 0)
-
-            
+                self.button_Play.update_text("Play")
         elif self.button_Next.is_clicked(event):
             print("Next move")
+            self.is_playing = False
+            pygame.time.set_timer(PLAY_EVENT, 0)
+            self.button_Play.update_text("Play")
             self.next_step()
         elif self.button_Previous.is_clicked(event):
             print("Previous move")
-
             for agent in self.map_view.agents:
-                if agent.pathIndex > 0:       
+                if agent.pathIndex > 0:
+                    self.is_playing = False
+                    pygame.time.set_timer(PLAY_EVENT, 0)
+                    self.button_Play.update_text("Play")
                     self.map_view.remove_line(agent)
-
         elif self.button_BackMenu.is_clicked(event):
             print("BackMenu move")
 
@@ -64,5 +68,4 @@ class Sidebar:
             for agent in self.map_view.agents:
                 if agent.pathIndex < len(agent.path):       
                     self.map_view.draw_line(agent.path[agent.pathIndex][0], agent.path[agent.pathIndex][1], agent)
-                # if agent.pathIndex == len(agent.path):  
-                #     print('Game ended')
+

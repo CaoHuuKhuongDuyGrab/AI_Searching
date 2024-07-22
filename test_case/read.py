@@ -6,6 +6,7 @@ import heapq
 def read_input(file_name):
     with open(file_name, 'r') as file:
         # Read the first line
+        number_agents = 0
         first_line = file.readline().strip()
         n, m, t, f = map(int, first_line.split())
 
@@ -15,13 +16,23 @@ def read_input(file_name):
             line = file.readline().strip().split()
             map_row = []
             for cell in line:
-                if cell.startswith('F') or cell.startswith('S') or cell.startswith('G'):
+                if cell.startswith('F') or cell.startswith('S') or cell.startswith('G') or cell == -1:
                     map_row.append(cell)
+                    if (cell.startswith('S')):
+                        number_agents += 1
                 else:
                     map_row.append(int(cell))
             map_data.append(map_row)
 
-    return n, m, t, f, map_data
+    return n, m, t, f, map_data, number_agents
+
+
+
+
+
+
+
+
 
 
 
@@ -219,7 +230,7 @@ def bfs_shortest_path_with_fuel(map_data, start, goal, t, f):
 
 if __name__ == "__main__":
     file_name = "D://AI_Searching/temp_file/my_input.txt"
-    n, m, t, f, map_data = read_input(file_name)
+    n, m, t, f, map_data, number_agents = read_input(file_name)
     print("n:", n)
     print("m:", m)
     print("t:", t)

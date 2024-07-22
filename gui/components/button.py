@@ -41,4 +41,5 @@ class Button:
                 if self.rect.collidepoint(event.pos):
                     return True
         return False
-    
+    def update_text(self, new_text):
+        self.text = new_text
