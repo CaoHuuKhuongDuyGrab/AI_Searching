@@ -15,7 +15,7 @@ def read_input(file_name):
             line = file.readline().strip().split()
             map_row = []
             for cell in line:
-                if cell.startswith('F') or cell == 'S' or cell == 'G' or cell == '-1':
+                if cell.startswith('F') or cell.startswith('S') or cell.startswith('G'):
                     map_row.append(cell)
                 else:
                     map_row.append(int(cell))
