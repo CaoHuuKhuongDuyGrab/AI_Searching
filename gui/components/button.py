@@ -5,24 +5,23 @@ COLOUR_TEXT_BLACK = (0,0,0)
 
 
 class Button:
-    def __init__(self, x, y, width, height, text, image_path = None, color= COLOUR_BUTTON, text_color= COLOUR_TEXT_BLACK, isCircle = False):
+    def __init__(self, x, y, width, height, text, command, image_path = None, color= COLOUR_BUTTON, text_color= COLOUR_TEXT_BLACK, isCircle = False, font = "valorax.otf"):
         self.x = x
         self.y = y
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.color = color
         self.text_color = text_color
-        self.font = pygame.font.Font(None, 36)
+        self.font = pygame.font.Font(font, 36)
         self.isCircle = isCircle
         self.radius = min(width, height) // 2 if isCircle else 0
         self.image = pygame.image.load(image_path) if image_path else None
         if self.image and isCircle:
             self.image = pygame.transform.scale(self.image, (self.radius, self.radius))
-
-
+        self.command = command
     def draw(self, screen):
         if not self.isCircle:
-            pygame.draw.rect(screen, self.color, self.rect, border_radius=200)
+            pygame.draw.rect(screen, self.color, self.rect, border_radius=1000)
             text_surf = self.font.render(self.text, True, self.text_color)
             text_rect = text_surf.get_rect(center=self.rect.center)
             screen.blit(text_surf, text_rect)
@@ -30,7 +29,6 @@ class Button:
             pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
             image_rect = self.image.get_rect(center=(self.x, self.y))
             screen.blit(self.image, image_rect)
-
     def is_clicked(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.isCircle:
@@ -43,3 +41,20 @@ class Button:
         return False
     def update_text(self, new_text):
         self.text = new_text
+
+
+
+class Text:
+    def __init__(self, x, y, text, font_size = 36, font_path = "valorax.otf", color=(255, 255, 255)):
+        self.x = x
+        self.y = y
+        self.text = text
+        self.color = color
+        self.font = pygame.font.Font(font_path, font_size)
+        self.text_surface = self.font.render(text, True, color)
+        self.rect = self.text_surface.get_rect(center=(x, y))
+
+    def draw(self, screen):
+        self.text_surface = self.font.render(self.text, True, self.color)
+        self.rect = self.text_surface.get_rect(center=(self.x, self.y))
+        screen.blit(self.text_surface, self.rect)

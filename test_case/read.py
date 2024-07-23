@@ -1,55 +1,19 @@
 # first init, divide file later 
-
+from ultils import read_input
 from collections import deque
 import heapq
 
-def read_input(file_name):
-    with open(file_name, 'r') as file:
-        # Read the first line
-        number_agents = 0
-        first_line = file.readline().strip()
-        n, m, t, f = map(int, first_line.split())
-
-        # Read the next n lines for the map
-        map_data = []
-        for _ in range(n):
-            line = file.readline().strip().split()
-            map_row = []
-            for cell in line:
-                if cell.startswith('F') or cell.startswith('S') or cell.startswith('G') or cell == -1:
-                    map_row.append(cell)
-                    if (cell.startswith('S')):
-                        number_agents += 1
-                else:
-                    map_row.append(int(cell))
-            map_data.append(map_row)
-
-    return n, m, t, f, map_data, number_agents
-
-
-
-
-
-
-
-
-
-
 
 def bfs_shortest_path(map_data, start, goal):
-    # Directions for moving in 4 possible directions: up, down, left, right
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     rows = len(map_data)
     cols = len(map_data[0])
     
-    # Initialize queue for BFS, starting with the start position
     queue = deque([start])
 
-    # Visited array to keep track of visited nodes
     visited = [[False]*cols for _ in range(rows)]
     visited[start[0]][start[1]] = True
 
-    # Parent dictionary to reconstruct the path if needed
     parent = {}
     
     while queue:

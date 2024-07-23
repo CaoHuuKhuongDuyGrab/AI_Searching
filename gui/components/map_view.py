@@ -1,5 +1,7 @@
 import pygame
 from collections import deque
+from ultils import read_output
+
 
 WHITE = (255,255,255)
 BLACK = (0, 0, 0)
@@ -24,22 +26,10 @@ AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, LIGHT_BLUE1, HEAVY_BRO
 
 
 
-
-
-
-def read_output(coordinates):
-    coord_list = coordinates.strip().split(') ')
-    lines = []
-    for i in range(len(coord_list) - 1):
-        start = tuple(map(int, coord_list[i].strip('(').split(',')))
-        end = tuple(map(int, coord_list[i + 1].strip('()').split(',')))
-        lines.append([start, end])
-    return lines
-
 class Agent:
     def __init__(self, colour, path, name=None):
         self.colour = colour
-        self.path = read_output(path)
+        self.path, self.numberSteps = read_output(path)
         self.name = name
         self.pathIndex = 0
         self.lines = deque()
