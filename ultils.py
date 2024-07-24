@@ -44,3 +44,6 @@ def read_output(coordinates):
     number_of_steps = len(coord_list) - 1
     return lines, number_of_steps
 
+def generate_inputfile_path(currentLevel, currentMap):
+    return f'./test_case/level{currentLevel}/test{currentMap}.txt'
+

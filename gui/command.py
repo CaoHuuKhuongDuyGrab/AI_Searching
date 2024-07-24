@@ -55,6 +55,37 @@ class Command_BackMenu(Command):
         self.screen_manager.current_screen = self.screen_manager.menu_screen
         print("Switched to Menu Screen")
 
+class Command_BackChoosingMap(Command):
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
+    def execute(self):
+        self.screen_manager.current_screen = self.screen_manager.choosingmap_screen
+        print("Switched to Choosing Screen")
+
+
+class Command_BackChoosingAlgorithm(Command):
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
+    def execute(self):
+        self.screen_manager.current_screen = self.screen_manager.choosingalgorithm_screen
+        print("Switched to Choosing Screen")
+
+
+
+class Command_EnterMap(Command):
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
+    def execute(self):
+        self.screen_manager.current_screen = self.screen_manager.choosingmap_screen
+        # print(self.screen_manager.choosinglevel_screen.currentLevel)
+
+
+class Command_ChoosingLevel(Command):
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
+    def execute(self):
+        self.screen_manager.current_screen = self.screen_manager.choosinglevel_screen
+
 
 class Command_StartGame(Command):
     def __init__(self, screen_manager):
@@ -63,8 +94,14 @@ class Command_StartGame(Command):
         self.screen_manager.current_screen = self.screen_manager.game_screen
 
 
-class Command_ChoosingMap(Command):
+class Command_StartChoosingAlgorithm(Command):
     def __init__(self, screen_manager):
         self.screen_manager = screen_manager
     def execute(self):
-        self.screen_manager.current_screen = self.screen_manager.choosingmap_screen
+        self.screen_manager.current_screen = self.screen_manager.choosingalgorithm_screen
+
+class Command_EnterCreditScreen(Command):
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
+    def execute(self):
+        self.screen_manager.current_screen = self.screen_manager.credit_screen

@@ -19,9 +19,13 @@ class Button:
         if self.image and isCircle:
             self.image = pygame.transform.scale(self.image, (self.radius, self.radius))
         self.command = command
+        self.highlighted = False  # New attribute to manage highlight state
     def draw(self, screen):
         if not self.isCircle:
-            pygame.draw.rect(screen, self.color, self.rect, border_radius=1000)
+            if self.highlighted:
+                pygame.draw.rect(screen, (255,255,255), self.rect, border_radius=1000)
+            else:
+                pygame.draw.rect(screen, self.color, self.rect, border_radius=1000)
             text_surf = self.font.render(self.text, True, self.text_color)
             text_rect = text_surf.get_rect(center=self.rect.center)
             screen.blit(text_surf, text_rect)
@@ -41,7 +45,8 @@ class Button:
         return False
     def update_text(self, new_text):
         self.text = new_text
-
+    def set_highlight(self, highlighted):
+        self.highlighted = highlighted
 
 
 class Text:

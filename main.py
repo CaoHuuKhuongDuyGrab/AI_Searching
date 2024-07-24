@@ -1,4 +1,6 @@
 from level.level_3 import Level3
+from level.level_1 import Level1
+
 from object.map import Map
 from gui import GameScreen, ScreenManager, MenuScreen
 import pygame
@@ -23,9 +25,9 @@ def main():
     pygame.quit()
 if __name__ == "__main__":
 
-    # _map = Map("temp_file/input_lv3.txt")
+    # _map = Map("test_case/input_lv3.txt")
     # print(_map.get_sources())
-    # level = Level3(_map)
+    # level = Level1(_map)
     # level.run()
     main()
 
