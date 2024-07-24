@@ -14,16 +14,20 @@ PLAY_EVENT = pygame.USEREVENT + 1
 PLAY_INTERVAL = 500
 
 class Sidebar:
-    def __init__(self, width, height, map_view, screen_manager):
+    def __init__(self, width, height, map_view, screen_manager, time, fuel):
         self.width = width
         self.height = height
         self.color =  NAVY_BLUE
+        self.time = time
+        self.fuel = fuel
         self.screen_manager = screen_manager
+        self.text_Time = Text(width / 2 - WIDTH_BUTTON / 2 + 120,200, "time: " + str(self.time))
+        self.text_Fuel = Text(width / 2 - WIDTH_BUTTON / 2 + 120,250, "tuel: " + str(self.fuel))
         self.text_GameOver = Text(width / 2 - WIDTH_BUTTON / 2 + 120,150, "game over!")
         self.button_Back = Button(width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingMap(screen_manager), isCircle= True, image_path= BUTTON_BACK) 
-        self.button_Play = Button(width / 2 - WIDTH_BUTTON / 2, 250, WIDTH_BUTTON, HEIGHT_BUTTON, 'PLAY', command=Command_Play(self))
-        self.button_Next = Button(width / 2 - WIDTH_BUTTON / 2, 250 + VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'NEXT', command= Command_NextMove(self))
-        self.button_Previous = Button(width / 2 - WIDTH_BUTTON / 2, 250 + 2 * VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'PREVIOUS', command=Command_PreviousMove(self))
+        self.button_Play = Button(width / 2 - WIDTH_BUTTON / 2, 310, WIDTH_BUTTON, HEIGHT_BUTTON, 'PLAY', command=Command_Play(self))
+        self.button_Next = Button(width / 2 - WIDTH_BUTTON / 2, 310 + VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'NEXT', command= Command_NextMove(self))
+        self.button_Previous = Button(width / 2 - WIDTH_BUTTON / 2, 310 + 2 * VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'PREVIOUS', command=Command_PreviousMove(self))
         self.map_view = map_view
         self.pathIndex = 0
         self.is_playing = False
@@ -31,6 +35,10 @@ class Sidebar:
     def draw(self, screen):
         sidebar_rect = pygame.Rect(0, 0, self.width, self.height)
         pygame.draw.rect(screen, self.color, sidebar_rect)
+        if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
+            self.text_Time.draw(screen)
+            if self.screen_manager.choosinglevel_screen.currentLevel>= 3:
+                self.text_Fuel.draw(screen)
         self.button_Back.draw(screen)
         self.button_Play.draw(screen)
         self.button_Next.draw(screen)

@@ -128,7 +128,7 @@ class GameScreen(Screen):
         self.paths = extend_paths(path)
         self.is_level1 = True
         self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
-        self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager)
+        self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager, self.t, self.f)
     def update(self):
         # input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
         # print(input_map)
