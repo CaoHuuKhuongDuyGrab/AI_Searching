@@ -114,7 +114,7 @@ class GameScreen(Screen):
             # print(self.screen_manager.choosingmap_screen.input_map)
             # self.map_view = self.screen_manager.choosingmap_screen
             self.paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
-            self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
+            self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths, screen_manager=self.screen_manager)
             # self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
             self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager, self.t, self.f)
     def update(self):
@@ -218,7 +218,7 @@ class ChoosingMapScreen(Screen):
                             self.input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
                             n, m, t, f, map_data, number_agents = read_input(self.input_map)
                             paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
-                            self.screen_manager.game_screen.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, map_data, number_agents, solution_path=paths)
+                            self.screen_manager.game_screen.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, map_data, number_agents, solution_path=paths, screen_manager=self.screen_manager)
                             self.screen_manager.game_screen.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.screen_manager.game_screen.map_view, self.screen_manager, t, f)
                         button.command.execute()
         return running

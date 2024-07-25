@@ -44,8 +44,9 @@ class Agent:
         self.pathIndex = 0
         self.lines = deque()
 class MapView:
-    def __init__(self, screen, x, y, width, height, map_data, number_agents, solution_path):
+    def __init__(self, screen, x, y, width, height, map_data, number_agents, solution_path, screen_manager):
         self.screen = screen
+        self.screen_manager = screen_manager
         self.x = x
         self.y = y
         self.width = width
@@ -80,8 +81,10 @@ class MapView:
                 elif (str(self.map_data[x][y]).startswith('G')):
                     self.color_square(x, y, PINK, str(self.map_data[x][y]))
                 elif (str(self.map_data[x][y]).startswith('F')):
-                    self.color_square(x, y, LIGHT_YELLOW, str(self.map_data[x][y]))
+                    if self.screen_manager.choosinglevel_screen.currentLevel >= 3:
+                        self.color_square(x, y, LIGHT_YELLOW, str(self.map_data[x][y]))
                 elif(self.map_data[x][y] > 0):
+                    if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
                         self.color_square(x, y, LIGHT_BLUE, str(self.map_data[x][y]))
 
         for (x, y), color in self.colored_squares.items():
