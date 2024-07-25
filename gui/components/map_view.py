@@ -77,7 +77,11 @@ class MapView:
                 elif (str(self.map_data[x][y]).startswith('S')):
                     for agent in self.agents:
                         if agent.name == self.map_data[x][y]:
-                            self.color_square(x, y, agent.colour, agent.name)
+                            if self.screen_manager.choosinglevel_screen.currentLevel <= 3:
+                                if agent.name == 'S':
+                                    self.color_square(x, y, agent.colour, agent.name)
+                            else:
+                                self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
                     self.color_square(x, y, PINK, str(self.map_data[x][y]))
                 elif (str(self.map_data[x][y]).startswith('F')):
