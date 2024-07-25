@@ -15,11 +15,11 @@ class Command_Play(Command):
     def execute(self):
         self.sidebar.is_playing = not self.sidebar.is_playing
         if self.sidebar.is_playing:
-            print("Play started")
+            # print("Play started")
             pygame.time.set_timer(PLAY_EVENT, PLAY_INTERVAL)
             self.sidebar.button_Play.update_text("STOP")
         else:
-            print("Play stopped")
+            # print("Play stopped")
             pygame.time.set_timer(PLAY_EVENT, 0)
             self.sidebar.button_Play.update_text("PLAY")
 
@@ -53,14 +53,14 @@ class Command_BackMenu(Command):
         self.screen_manager = screen_manager
     def execute(self):
         self.screen_manager.current_screen = self.screen_manager.menu_screen
-        print("Switched to Menu Screen")
+        # print("Switched to Menu Screen")
 
 class Command_BackChoosingMap(Command):
     def __init__(self, screen_manager):
         self.screen_manager = screen_manager
     def execute(self):
         self.screen_manager.current_screen = self.screen_manager.choosingmap_screen
-        print("Switched to Choosing Screen")
+        # print("Switched to Choosing Screen")
 
 
 class Command_BackChoosingAlgorithm(Command):
@@ -68,7 +68,7 @@ class Command_BackChoosingAlgorithm(Command):
         self.screen_manager = screen_manager
     def execute(self):
         self.screen_manager.current_screen = self.screen_manager.choosingalgorithm_screen
-        print("Switched to Choosing Screen")
+        # print("Switched to Choosing Screen")
 
 
 

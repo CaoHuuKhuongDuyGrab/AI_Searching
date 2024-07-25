@@ -11,5 +11,4 @@ class Level3(Level):
         algorithm = BFS_With_Time_Fuel_Constrain(self.map)
         algorithm.run()
         path = algorithm.get_trace()
-        print(algorithm.algorithm_name)
-        self.print_path(path)
+        return path

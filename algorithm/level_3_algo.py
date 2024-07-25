@@ -22,7 +22,7 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
         while queue:
             dist, current_x, current_y, current_time, current_fuel = queue.popleft()
             if self.map.cell_type(current_x, current_y) == DESTINATION and current_time <= self.map.time_commitment:
-                print(f"Destination found at ({current_x}, {current_y}) with Time: {current_time}, Fuel: {current_fuel}, Distance: {dist}")
+                # print(f"Destination found at ({current_x}, {current_y}) with Time: {current_time}, Fuel: {current_fuel}, Distance: {dist}")
                 return
 
             next_moves = self.map.next_move(current_x, current_y)

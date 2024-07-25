@@ -7,35 +7,42 @@ WHITE = (255,255,255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 BLUE = (34, 70, 120)
-LIGHT_GREEN = (173, 255, 219)
 
 
+LIGHT_GREEN = (173, 255, 219, 0)
 LIGHT_ORANGE = (255, 192, 153)
 LIGHT_PURPLE = (198, 164, 252)
-LIGHT_BLUE = (182, 225, 252)
-LIGHT_YELLOW = (243, 255, 184)
 LIGHT_BLUE1 = (83, 80, 250)
 HEAVY_BROWN = (125, 26, 26)
-
 GREY = (169, 169, 169)
+PINK_PINK=  (175, 0, 196)
+RED = (255, 0, 0)
+BLUE_1 = (0, 0, 255)
+GREEN = (0, 255, 0)
+
+LIGHT_YELLOW = (243, 255, 184)
+LIGHT_BLUE = (182, 225, 252)
+
 NAVY_BLUE = (16, 44, 82)
 BORDER_COLOR = (0, 0, 0)  
 PINK = (252, 182, 214)
 YELLOW = (230, 207, 108)
-AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, LIGHT_BLUE1, HEAVY_BROWN]
+AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, LIGHT_BLUE1, HEAVY_BROWN, GREY, PINK_PINK, RED, BLUE_1, GREEN]
 
 
 
 class Agent:
     def __init__(self, colour, path, name=None):
         self.colour = colour
-        self.path, self.numberSteps = read_output(path)
+        self.path = None
+        self.numberSteps = 0
+        if(path == '-1'):
+            self.path = '-1'
+        else:
+            self.path, self.numberSteps = read_output(path)
         self.name = name
         self.pathIndex = 0
         self.lines = deque()
-
-
-
 class MapView:
     def __init__(self, screen, x, y, width, height, map_data, number_agents, solution_path):
         self.screen = screen
@@ -52,25 +59,16 @@ class MapView:
         self.text_in_squares = {}  
         self.images_in_squares = {} 
         self.font = pygame.font.Font(None, 36)  
-
         self.agents = []
-        for i in range (number_agents):
-            if i < len(solution_path):
-                agent = Agent(AGENTS_COLOUR[i], solution_path[i])
-                agent.name = 'S'
-                if i != 0:
-                    agent.name += str(i)
-                self.agents.append(agent)
-
-
-
+        self.solution_path = solution_path
+        self.update_agents()
+        # print(self.solution_path)
     def draw_map(self):
         self.map_surface.fill(WHITE)  
         for x in range(0, self.width, self.grid_x):
             pygame.draw.line(self.map_surface, BORDER_COLOR, (x, 0), (x, self.height))
         for y in range(0, self.height, self.grid_y):
             pygame.draw.line(self.map_surface, BORDER_COLOR, (0, y), (self.width, y))
-
         for x in range (len(self.map_data)):
             for y in range (len(self.map_data[0])):
                 if (self.map_data[x][y] == -1):
@@ -102,11 +100,11 @@ class MapView:
                 image = pygame.transform.scale(image, (self.grid_x -1, self.grid_y - 1))
                 image_rect = image.get_rect(center=rect.center)
                 self.map_surface.blit(image, image_rect)
-
-
         for agent in self.agents:
-            if agent.path != None:
+            if agent.path != None and agent.path != -1:
+                # print(len(agent.lines))
                 for start, end in agent.lines:
+                    # print(agent.lines)
                     pygame.draw.line(self.map_surface, agent.colour, start, end, 4)
 
         self.screen.blit(self.map_surface, (self.x, self.y))
@@ -120,9 +118,24 @@ class MapView:
         end_pos = (end_grid[1] * self.grid_x + self.grid_x // 2, end_grid[0] * self.grid_y + self.grid_y // 2)
         agent.lines.append((start_pos, end_pos))
         agent.pathIndex += 1
-
     def remove_line(self, agent):
         if agent.lines:
             agent.lines.pop()
             agent.pathIndex -= 1
-
+    def update_agents(self):
+        # if self.solution_path == '-1':
+        for i in range (self.number_agents):        
+            if i < len(self.solution_path):
+                agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
+                agent.name = 'S'
+                if i != 0:
+                    agent.name += str(i)
+                self.agents.append(agent)
+        else:
+            for i in range (self.number_agents):        
+                if i < len(self.solution_path):
+                    agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
+                    agent.name = 'S'
+                    if i != 0:
+                        agent.name += str(i)
+                    self.agents.append(agent)

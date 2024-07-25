@@ -23,7 +23,7 @@ class Sidebar:
         self.screen_manager = screen_manager
         self.text_Time = Text(width / 2 - WIDTH_BUTTON / 2 + 120,200, "time: " + str(self.time))
         self.text_Fuel = Text(width / 2 - WIDTH_BUTTON / 2 + 120,250, "tuel: " + str(self.fuel))
-        self.text_GameOver = Text(width / 2 - WIDTH_BUTTON / 2 + 120,150, "game over!")
+        self.text_GameOver = Text(width / 2 - WIDTH_BUTTON / 2 + 120,150, "game end!")
         self.button_Back = Button(width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingMap(screen_manager), isCircle= True, image_path= BUTTON_BACK) 
         self.button_Play = Button(width / 2 - WIDTH_BUTTON / 2, 310, WIDTH_BUTTON, HEIGHT_BUTTON, 'PLAY', command=Command_Play(self))
         self.button_Next = Button(width / 2 - WIDTH_BUTTON / 2, 310 + VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'NEXT', command= Command_NextMove(self))
@@ -31,7 +31,6 @@ class Sidebar:
         self.map_view = map_view
         self.pathIndex = 0
         self.is_playing = False
-        
     def draw(self, screen):
         sidebar_rect = pygame.Rect(0, 0, self.width, self.height)
         pygame.draw.rect(screen, self.color, sidebar_rect)
@@ -44,25 +43,29 @@ class Sidebar:
         self.button_Next.draw(screen)
         self.button_Previous.draw(screen)
         if self.pathIndex == self.map_view.agents[0].numberSteps:
+            # if self.map_view.agents
             self.is_playing = False 
             pygame.time.set_timer(PLAY_EVENT, 0)
             self.text_GameOver.draw(screen)
             self.button_Play.update_text("PLAY")
-
         else:
             None
     def handle_event(self, event):
         for button in [self.button_Back, self.button_Play, self.button_Next, self.button_Previous]:
             if button.is_clicked(event):
-                if button == self.button_Back and self.screen_manager.game_screen.is_level1 == True:
-                    button = Button(self.width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingAlgorithm(self.screen_manager), isCircle= True, image_path= BUTTON_BACK) 
-
+                if button == self.button_Back and self.screen_manager.choosinglevel_screen.currentLevel == 1:
+                    self.screen_manager.choosingalgorithm_screen.set_unhighlighted_button()
+                    button = Button(self.width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingAlgorithm(self.screen_manager), isCircle= True, image_path= BUTTON_BACK)
+                elif button == self.button_Back and self.screen_manager.choosinglevel_screen.currentLevel != 1:
+                    self.button_Back = Button(self.width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingMap(self.screen_manager), isCircle= True, image_path= BUTTON_BACK) 
                 button.command.execute()
     def next_step(self):
-            for agent in self.map_view.agents:
+        for agent in self.map_view.agents:
+            if agent.path != '-1':
+                # print(agent.pathIndex, len(agent.path))
                 if agent.pathIndex < len(agent.path):       
                     self.map_view.draw_line(agent.path[agent.pathIndex][0], agent.path[agent.pathIndex][1], agent)
-            if self.pathIndex != self.map_view.agents[0].numberSteps:
-                self.pathIndex += 1
+        if self.pathIndex != self.map_view.agents[0].numberSteps:
+            self.pathIndex += 1
 
 

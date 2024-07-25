@@ -63,3 +63,6 @@ class Text:
         self.text_surface = self.font.render(self.text, True, self.color)
         self.rect = self.text_surface.get_rect(center=(self.x, self.y))
         screen.blit(self.text_surface, self.rect)
+
+    def update_text(self, new_text):
+        self.text = new_text

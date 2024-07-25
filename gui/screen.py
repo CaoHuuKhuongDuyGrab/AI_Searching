@@ -7,7 +7,7 @@ from test_case.read import *
 from .components.map_view import MapView
 from .components.sidebar import Sidebar
 from .components.button import Text, Button
-from ultils import extend_paths, generate_inputfile_path
+from ultils import parse_path, generate_inputfile_path
 from .command import Command_StartGame, Command_BackMenu, Command_EnterMap, Command_EnterCreditScreen, Command_BackChoosingMap, Command_StartChoosingAlgorithm, Command_ChoosingLevel
 
 BUTTON_BACK = './gui/assets/back2.png'
@@ -33,21 +33,6 @@ NAVY_BLUE = (16, 44, 82)
 YELLOW = (230, 207, 108)
 PLAY_EVENT = pygame.USEREVENT + 1
 
-# path = [
-#     "(1, 1) (2, 1) (3, 1) (4, 1) (5, 1) (6, 1) (6, 2) (6, 3) (5, 3) (5, 4) (5, 5) (6, 5) (7, 5) (7, 6) (7, 7) (7, 8)",
-#     "(1, 2) (1, 3) (1, 4) (1, 5) (2, 5)",
-#     "(1, 3) (1, 4) (1, 5)",
-#     "(1, 4) (1, 5) (1, 6)",
-#     "(1, 5) (1, 6) (1, 7)"
-#         ]
-
-path = [
-    "(4, 1) (4, 2) (4, 3) (4, 4) (4, 5) (4, 6) (4, 7) (4, 8 ) (5, 8 ) (5, 9) (5, 10) (5, 11) (5, 12) (5, 13) (6, 13) (6, 14) (6, 15) (6, 16) (7, 16) (7, 17) (7, 18) (7, 19) (8, 19) (9, 19) (10, 19) (11, 19) (12, 19) (13, 19) (14, 19) (15, 19) (15, 20) (16, 20) (17, 20) (18, 20) (18, 21) (18, 22) (19, 22) (20, 22)",
-    "(1, 2) (1, 3) (1, 4) (1, 5) (2, 5)",
-    "(1, 3) (1, 4) (1, 5)",
-    "(1, 4) (1, 5) (1, 6)",
-    "(1, 5) (1, 6) (1, 7)"
-        ]
 
 
 class ScreenManager:
@@ -122,13 +107,16 @@ class GameScreen(Screen):
     def __init__(self, screen, screen_manager):
         super().__init__(screen)
         self.screen_manager = screen_manager
-        input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
-        print(input_map)
-        self.n, self.m, self.t, self.f, self.map_data, self.number_agents = read_input(input_map)
-        self.paths = extend_paths(path)
         self.is_level1 = True
-        self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
-        self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager, self.t, self.f)
+        self.input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)      
+        if self.screen_manager.choosingmap_screen.input_map:
+            self.n, self.m, self.t, self.f, self.map_data, self.number_agents = read_input(self.screen_manager.choosingmap_screen.input_map)
+            # print(self.screen_manager.choosingmap_screen.input_map)
+            # self.map_view = self.screen_manager.choosingmap_screen
+            self.paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
+            self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
+            # self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
+            self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager, self.t, self.f)
     def update(self):
         # input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
         # print(input_map)
@@ -145,8 +133,10 @@ class GameScreen(Screen):
             self.sidebar.handle_event(event)
         return running
     def draw(self):
-        self.sidebar.draw(self.screen)
-        self.map_view.draw_map()
+        if self.sidebar:
+            self.sidebar.draw(self.screen)
+        if self.map_view:
+            self.map_view.draw_map()
         pygame.display.flip()
 
 
@@ -194,6 +184,7 @@ class ChoosingMapScreen(Screen):
         super().__init__(screen)
         self.screen_manager = screen_manager
         self.currentMap = 1
+        self.input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, 1)
         self.button_BackMenu = Button(40, 50 , 240, 50, 'BACK', command=Command_BackMenu(screen_manager), isCircle= True, image_path= BUTTON_BACK)
         self.button_OK = None
         self.button_Map1 = Button(190, 150 , 240, 50, 'MAP 1', command=None) 
@@ -213,14 +204,22 @@ class ChoosingMapScreen(Screen):
             for index, button in enumerate(buttons):
                 if button != None and button.is_clicked(event):
                     if button in [self.button_Map1, self.button_Map2, self.button_Map3, self.button_Map4, self.button_Map5]:
-                        self.button_OK = Button(540, SCREEN_HEIGHT - 150 , 130, 50, 'ok', command=Command_StartChoosingAlgorithm(self.screen_manager))
+                        if self.screen_manager.choosinglevel_screen.currentLevel == 1:
+                            self.button_OK = Button(540, SCREEN_HEIGHT - 150 , 130, 50, 'ok', command=Command_StartChoosingAlgorithm(self.screen_manager))
+                        else:
+                            self.button_OK = Button(540, SCREEN_HEIGHT - 150 , 130, 50, 'ok', command=Command_StartGame(self.screen_manager))
                         self.set_highlighted_button(button)
                         self.currentMap = index
-                        print(self.currentMap)
                     if button == self.button_BackMenu:
                         self.button_OK = None
                         self.set_unhighlighted_button()
                     if  button.command:
+                        if button == self.button_OK:
+                            self.input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
+                            n, m, t, f, map_data, number_agents = read_input(self.input_map)
+                            paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
+                            self.screen_manager.game_screen.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, map_data, number_agents, solution_path=paths)
+                            self.screen_manager.game_screen.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.screen_manager.game_screen.map_view, self.screen_manager, t, f)
                         button.command.execute()
         return running
     
@@ -343,7 +342,7 @@ class ChoosingAlgorithmScreen(Screen):
             self.button_OK.draw(self.screen)
         pygame.display.flip()
     def set_unhighlighted_button(self):
-        for button in [self.button_BFS, self.button_DFS, self.button_UCS, self.button_DFS, self.button_ASTAR]:
+        for button in [self.button_BFS, self.button_DFS, self.button_UCS, self.button_GBFS, self.button_ASTAR]:
             button.set_highlight(False)
     def set_highlighted_button(self, selected_button):
         self.set_unhighlighted_button()

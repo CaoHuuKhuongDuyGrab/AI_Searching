@@ -11,5 +11,6 @@ class Level2(Level):
         algorithm = BFS_With_Time_Constrain(self.map)
         algorithm.run()
         path = algorithm.get_trace()
-        print(algorithm.algorithm_name)
-        self.print_path(path)
+        return path
+        # print(algorithm.algorithm_name)
+        # self.print_path(path)

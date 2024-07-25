@@ -1,3 +1,10 @@
+from object.map import Map
+from level.level_3 import Level3
+from level.level_2 import Level2
+from level.level_1 import Level1
+
+
+
 def extend_paths(paths):
     parsed_paths = [list(map(lambda s: tuple(map(int, s.strip('()').split(','))), path.split(') ('))) for path in paths]
     max_length = max(len(path) for path in parsed_paths)
@@ -44,6 +51,48 @@ def read_output(coordinates):
     number_of_steps = len(coord_list) - 1
     return lines, number_of_steps
 
+
+
+
 def generate_inputfile_path(currentLevel, currentMap):
     return f'./test_case/level{currentLevel}/test{currentMap}.txt'
 
+def parse_path(inputfile_path, current_level, algorithm):
+    pathReturned = None
+    _map = Map(inputfile_path)
+    # print(inputfile_path)
+    level = None
+    if current_level == 1:
+        level = Level1(_map)
+        path1, path2, path3, path4, path5 = level.run()
+        if algorithm == 1:            # BFS 
+            pathReturned = path1
+        elif algorithm == 2:          # DFS 
+            pathReturned = path2
+        elif algorithm == 3:          # UCS
+            pathReturned = path3
+        elif algorithm == 4:          # GBFS
+            pathReturned = path4
+        else:                         # AStar
+            pathReturned = path5
+    elif current_level == 2:
+        level = Level2(_map)
+        pathReturned = level.run()
+    elif current_level == 3:
+        level = Level3(_map)
+        pathReturned = level.run()
+    else:
+        pass
+    # print(_map.matrix)
+
+    # print(pathReturned)
+    # print(pathReturned)
+    pathReturned = convert_tuples_to_strings(pathReturned)
+    return pathReturned
+
+
+def convert_tuples_to_strings(tuples_list):
+    if tuples_list == -1:
+        return ['-1']
+    string_representation = " ".join(str(t) for t in tuples_list)
+    return [string_representation]
