@@ -17,7 +17,7 @@ def extend_paths(paths):
     extended_paths_str = [' '.join(f'({x},{y})' for (x, y) in path) for path in extended_paths]
     return extended_paths_str
 
-def read_input(file_name):
+def read_input(file_name, current_level):
     with open(file_name, 'r') as file:
         # Read the first line
         number_agents = 0
@@ -30,15 +30,44 @@ def read_input(file_name):
             line = file.readline().strip().split()
             map_row = []
             for cell in line:
-                if cell.startswith('F') or cell.startswith('S') or cell.startswith('G') or cell == -1:
-                    map_row.append(cell)
-                    if (cell.startswith('S')):
+                if cell.startswith('F'):
+                    if current_level >= 3:
+                        map_row.append(cell)
+                    else:
+                        map_row.append(0)
+                elif cell.startswith('S'):
+                    if current_level == 4:
+                        map_row.append(cell)
                         number_agents += 1
+                    else:
+                        number_agents = 1
+                        if cell == 'S':
+                            map_row.append(cell)
+                        else:
+                            map_row.append(0)
+                elif cell.startswith('G'):
+                    if current_level == 4:
+                        map_row.append(cell)
+                    else:
+                        if cell == 'G':
+                            map_row.append(cell)
+                        else:
+                            map_row.append(0)
                 else:
-                    map_row.append(int(cell))
+                    if int(cell) != -1 and int(cell) != 0:
+                        if current_level >= 2:
+                            map_row.append(int(cell))
+                        else:
+                            map_row.append(0)
+                    else:
+                        map_row.append(int(cell))
             map_data.append(map_row)
-
-    return n, m, t, f, map_data, number_agents
+    if current_level == 2:
+        f = 0
+    if current_level == 1:
+        t = 0
+        f = 0
+    return n,m,t, f, map_data, number_agents
 
 
 def read_output(coordinates):

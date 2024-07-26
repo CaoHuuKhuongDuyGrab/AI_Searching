@@ -83,13 +83,18 @@ class MapView:
                             # else:
                             self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
-                    self.color_square(x, y, PINK, str(self.map_data[x][y]))
+                    if str(self.map_data[x][y]) == 'G':
+                        self.color_square(x, y, AGENTS_COLOUR[0], str(self.map_data[x][y]))
+                    else:
+                        goal_name = str(self.map_data[x][y])
+                        i = int(goal_name[1:])
+                        self.color_square(x, y, AGENTS_COLOUR[i], str(self.map_data[x][y]))
                 elif (str(self.map_data[x][y]).startswith('F')):
-                    if self.screen_manager.choosinglevel_screen.currentLevel >= 3:
-                        self.color_square(x, y, LIGHT_YELLOW, str(self.map_data[x][y]))
+                    # if self.screen_manager.choosinglevel_screen.currentLevel >= 3:
+                    self.color_square(x, y, LIGHT_YELLOW, str(self.map_data[x][y]))
                 elif(self.map_data[x][y] > 0):
-                    if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
-                        self.color_square(x, y, LIGHT_BLUE, str(self.map_data[x][y]))
+                    # if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
+                    self.color_square(x, y, LIGHT_BLUE, str(self.map_data[x][y]))
 
         for (x, y), color in self.colored_squares.items():
             rect = pygame.Rect(y * self.grid_x, x * self.grid_y, self.grid_x, self.grid_y)
