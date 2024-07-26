@@ -110,7 +110,10 @@ def parse_path(inputfile_path, current_level, algorithm):
         pathReturned = level.run()
     elif current_level == 3:
         level = Level3(_map)
-        pathReturned = level.run()
+        # pathReturned = level.run()
+        print("Level 3")
+        pathReturned = [[(1, 1), (1, 2), (1, 3)], [(3, 2), (3, 3), (3, 4), (3, 5)]]
+        # pathReturned = [(1, 1), (1, 2), (1, 3)]
     else:
         pass
     # print(_map.matrix)
@@ -125,5 +128,11 @@ def parse_path(inputfile_path, current_level, algorithm):
 def convert_tuples_to_strings(tuples_list):
     if tuples_list == -1:
         return ['-1']
+    converted_path = []
+    if type(tuples_list[0]) == list:
+        for path in tuples_list:
+            converted_path.append(" ".join(str(t) for t in path))
+        print(converted_path)
+        return converted_path
     string_representation = " ".join(str(t) for t in tuples_list)
     return [string_representation]
