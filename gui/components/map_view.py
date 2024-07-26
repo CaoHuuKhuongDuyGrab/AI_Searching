@@ -36,7 +36,7 @@ class Agent:
         self.colour = colour
         self.path = None
         self.numberSteps = 0
-        if(path == '-1'):
+        if(path == '-1' or path == None):
             self.path = '-1'
         else:
             self.path, self.numberSteps = read_output(path)
@@ -77,11 +77,11 @@ class MapView:
                 elif (str(self.map_data[x][y]).startswith('S')):
                     for agent in self.agents:
                         if agent.name == self.map_data[x][y]:
-                            if self.screen_manager.choosinglevel_screen.currentLevel <= 3:
-                                if agent.name == 'S':
-                                    self.color_square(x, y, agent.colour, agent.name)
-                            else:
-                                self.color_square(x, y, agent.colour, agent.name)
+                            # if self.screen_manager.choosinglevel_screen.currentLevel <= 3:
+                            #     # if agent.name == 'S':
+                            #     self.color_square(x, y, agent.colour, agent.name)
+                            # else:
+                            self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
                     self.color_square(x, y, PINK, str(self.map_data[x][y]))
                 elif (str(self.map_data[x][y]).startswith('F')):
@@ -109,9 +109,9 @@ class MapView:
                 self.map_surface.blit(image, image_rect)
         for agent in self.agents:
             if agent.path != None and agent.path != -1:
-                # print(len(agent.lines))
                 for start, end in agent.lines:
                     # print(agent.lines)
+                    # print(agent.name, agent.colour)
                     pygame.draw.line(self.map_surface, agent.colour, start, end, 4)
 
         self.screen.blit(self.map_surface, (self.x, self.y))
@@ -130,19 +130,24 @@ class MapView:
             agent.lines.pop()
             agent.pathIndex -= 1
     def update_agents(self):
-        # if self.solution_path == '-1':
-        for i in range (self.number_agents):        
-            if i < len(self.solution_path):
-                agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
-                agent.name = 'S'
-                if i != 0:
-                    agent.name += str(i)
-                self.agents.append(agent)
-        else:
-            for i in range (self.number_agents):        
-                if i < len(self.solution_path):
-                    agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
-                    agent.name = 'S'
-                    if i != 0:
-                        agent.name += str(i)
+        for x in range (len(self.map_data)):
+            for y in range (len(self.map_data[0])):
+                if str(self.map_data[x][y]).startswith('S'):
+                    # print(str(self.map_data[x][y]))
+                    agent_name = str(self.map_data[x][y])
+                    if agent_name == 'S':
+                        agent_index = 0
+                    else:
+                        agent_index = int(agent_name[1:])
+                    if agent_index < len(self.solution_path):
+                        agent = Agent(AGENTS_COLOUR[agent_index], self.solution_path[agent_index], agent_name)
+                    else:
+                        agent = Agent(AGENTS_COLOUR[agent_index], '-1', agent_name)
                     self.agents.append(agent)
+        #     for i in range (self.number_agents):        
+        #         if i < len(self.solution_path):
+        #             agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
+        #             agent.name = 'S'
+        #             if i != 0:
+        #                 agent.name += str(i)
+        #             self.agents.append(agent)

@@ -75,6 +75,7 @@ def parse_path(inputfile_path, current_level, algorithm):
             pathReturned = path4
         else:                         # AStar
             pathReturned = path5
+
     elif current_level == 2:
         level = Level2(_map)
         pathReturned = level.run()
@@ -84,6 +85,7 @@ def parse_path(inputfile_path, current_level, algorithm):
     else:
         pass
     # print(_map.matrix)
+    # print(current_level, algorithm, pathReturned)
 
     # print(pathReturned)
     # print(pathReturned)
