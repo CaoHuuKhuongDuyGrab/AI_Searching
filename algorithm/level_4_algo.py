@@ -182,6 +182,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                     self.add_destination(random_cell, agent_index)
             elif done[0] == True :
                 return True
+        self.list_matrix.append(self.map.matrix)
 
 
 

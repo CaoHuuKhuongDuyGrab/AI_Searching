@@ -17,6 +17,7 @@ class Map:
         self.fuel = None
         self.matrix = None
         self.origin_map = None
+        self.list_matrix = []
         if file_path is not None:
             self.load_map(file_path)
     
@@ -49,6 +50,10 @@ class Map:
             tmp_matrix.append(tmp)
         self.origin_map = copy.deepcopy(self)  
         self.origin_map.matrix = tmp_matrix
+        self.list_matrix.append(self.matrix)
+    
+    def get_list_matrix(self):
+        return self.list_matrix
     
     def get_valid_cell(self):
         valid_cells = []
