@@ -1,6 +1,7 @@
 import pygame
 from collections import deque
 from ultils import read_output
+from collections import deque
 
 
 WHITE = (255,255,255)
@@ -65,9 +66,32 @@ class MapView:
         self.update_agents()
         # self.coord_agent_map = {}  # Track the most recent agent for each coordinate
         self.line_order = [] 
+        self.destination_timeline = None
 
         # print(self.solution_path)
+    def load_destination_timeline(self):
+        self.destination_timeline = deque()
+        with open("algorithm/new_des.txt", "r") as f:
+            for line in f:
+                des = line.strip().split()
+                _time, x, y, goal_name = des
+                _time, x, y = map(int, (_time, x, y))
+                self.destination_timeline.append((_time, x, y, goal_name))
+            
     def draw_map(self):
+        if self.destination_timeline is None:
+            self.load_destination_timeline()
+        while len(self.destination_timeline) > 0:
+            _time, _x, _y, goal_name = self.destination_timeline[0]
+            if _time > self.agents[0].pathIndex:
+                break
+            self.destination_timeline.popleft()
+            for x in range (len(self.map_data)):
+                for y in range (len(self.map_data[0])):
+                    if self.map_data[x][y] == goal_name:
+                        self.map_data[x][y], self.map_data[_x][_y] = self.map_data[_x][_y], self.map_data[x][y]
+                        self.color_square(x, y, WHITE)
+        
         self.map_surface.fill(WHITE)  
         for x in range(0, self.width, self.grid_x):
             pygame.draw.line(self.map_surface, BORDER_COLOR, (x, 0), (x, self.height))
@@ -86,6 +110,8 @@ class MapView:
                             # else:
                             self.color_square(x, y, agent.colour, agent.name)
                 elif (str(self.map_data[x][y]).startswith('G')):
+                    # if self.agents[0].pathIndex == 9:
+                    #     print(f"x = {x}, y = {y}, goal = {self.map_data[x][y]}")
                     if str(self.map_data[x][y]) == 'G':
                         self.color_square(x, y, AGENTS_COLOUR[0], str(self.map_data[x][y]))
                     else:
@@ -98,6 +124,9 @@ class MapView:
                 elif(self.map_data[x][y] > 0):
                     # if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
                     self.color_square(x, y, LIGHT_BLUE, str(self.map_data[x][y]))
+        
+        
+
 
         for (x, y), color in self.colored_squares.items():
             rect = pygame.Rect(y * self.grid_x, x * self.grid_y, self.grid_x, self.grid_y)
@@ -150,6 +179,8 @@ class MapView:
 
 
         self.screen.blit(self.map_surface, (self.x, self.y))
+        # if self.agents[0].pathIndex == 9:
+        #     self.map_surface.fill(WHITE)  
 
     def color_square(self, grid_x, grid_y, color, text=None, image_path=None):
         self.colored_squares[(grid_x, grid_y)] = color

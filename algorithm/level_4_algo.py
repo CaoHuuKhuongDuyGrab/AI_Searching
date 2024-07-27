@@ -177,7 +177,7 @@ class Multiple_Agent_Algorithm(Algorithm):
         for _ in range(waiting_time + 1):
             self.path[agent_index].append((next_move[0], next_move[1], new_time, new_fuel))
     
-    def update_map(self, current_time):
+    def update_map(self, current_time, fo):
         sources = self.map.get_sources()
         destinations = self.map.get_destinations()
         debug = (current_time == 2)
@@ -207,6 +207,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                         self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
                         self.map.origin_map.matrix[source[0]][source[1]] = "0"
                         done[agent_index] = False
+                        fo.write(f"{current_time} {random_cell[0]} {random_cell[1]} {"G" + str(agent_index)}\n")
                         # self.add_destination(random_cell, agent_index)
         except:
             print(f"Sai o dau do{current_time}")
@@ -228,6 +229,8 @@ class Multiple_Agent_Algorithm(Algorithm):
             self.path[index].append((source[0], source[1], 0, self.map.fuel))
 
         cnt_time = 0
+        fo = open("algorithm/new_des.txt", "w")
+
         try:
             while True:
                 for i in range(self.num_agents):
@@ -242,7 +245,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                         #     print(self.path[index][-1], len(self.path[index]))
                 
                 print(cnt_time)
-                if self.update_map(cnt_time) == True:
+                if self.update_map(cnt_time, fo) == True:
                     print("Reached the goal")
                     break
                 
@@ -256,6 +259,8 @@ class Multiple_Agent_Algorithm(Algorithm):
             print(f"Error at time {cnt_time}")
             # print(e)
         print("ENDDD")
+        fo.close()
+
 
     def get_trace(self):
         if self.path == None:

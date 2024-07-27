@@ -13,6 +13,6 @@ class Level4(Level):
         path = algorithm.get_trace()
         print(len(self.map.get_list_matrix()))
         print(len(path[0]))
-        return (path, self.map.get_list_matrix())
+        # return (path, self.map.get_list_matrix())
         # print(self.map.get_list_matrix())
-        # return path
+        return path
