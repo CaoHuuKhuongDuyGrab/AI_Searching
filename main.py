@@ -1,7 +1,8 @@
 
-from level.level_3 import Level3
-from level.level_2 import Level2
 from level.level_1 import Level1
+from level.level_2 import Level2
+from level.level_3 import Level3
+from level.level_4 import Level4
 
 from object.map import Map
 from gui import GameScreen, ScreenManager, MenuScreen
@@ -34,8 +35,9 @@ def main():
         screen_manager.draw()
     pygame.quit()
 if __name__ == "__main__":
-    # _map = Map("test_case/level3/test5.txt")
-    # print(_map.get_sources())
+    # _map = Map("test_case/level4/test1.txt")
+    # level = Level4(_map)
+    # print(level.run())
     # level = Level3(_map)
     # print(level.run())
     # new_path = convert_tuples_to_strings(path)
