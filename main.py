@@ -35,14 +35,14 @@ def main():
         screen_manager.draw()
     pygame.quit()
 if __name__ == "__main__":
-    _map = Map("test_case/level4/test1.txt")
-    level = Level4(_map)
-    print(level.run())
+    # _map = Map("test_case/level4/test1.txt")
+    # level = Level4(_map)
+    # print(level.run())
     # level = Level3(_map)
     # print(level.run())
     # new_path = convert_tuples_to_strings(path)
     # print(new_path)
-    # main()
+    main()
 
 
 
