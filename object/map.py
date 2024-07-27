@@ -44,7 +44,7 @@ class Map:
             tmp = []
             for j in range(self.num_cols):
                 if self.cell_type(i, j) == SOURCE or self.cell_type(i, j) == DESTINATION:
-                    tmp.append(0)
+                    tmp.append('0')
                 tmp.append(self.matrix[i][j])
             tmp_matrix.append(tmp)
         self.origin_map = copy.deepcopy(self)  

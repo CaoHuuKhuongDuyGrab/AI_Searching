@@ -97,6 +97,7 @@ class Multiple_Agent_Algorithm(Algorithm):
             if agent_index == 2:
                 pass
             if _time - 1 < 0: 
+                print("Time problem !")
                 # raise Exception(f"Agent index: {agent_index} got the Time problem")
                 return
             self.path[agent_index].append((source[0], source[1], _time - 1, fuel))
@@ -173,11 +174,13 @@ class Multiple_Agent_Algorithm(Algorithm):
             for index in range(self.num_agents):
                 if cnt_time + 1 == len(self.path[index]):
                     self.get_next_state(self.path[index][-1], index, cnt_time + 1)
-                    if index == 2:
-                        print(self.path[index][-1], len(self.path[index]))
+                    # if index == 2:
+                    #     print(self.path[index][-1], len(self.path[index]))
             if self.update_map(cnt_time) == True:
+                print("Reached the goal")
                 return
             cnt_time += 1
+            print(cnt_time)
             self.map.print_2d_array()
 
     def get_trace(self):
