@@ -21,19 +21,22 @@ class Sidebar:
         self.time = time
         self.fuel = fuel
         self.screen_manager = screen_manager
+        self.pathIndex = 0
         self.text_Time = Text(width / 2 - WIDTH_BUTTON / 2 + 120,200, "time: " + str(self.time))
         self.text_Fuel = Text(width / 2 - WIDTH_BUTTON / 2 + 120,250, "tuel: " + str(self.fuel))
+        self.text_Step = Text(width / 2 - WIDTH_BUTTON / 2 + 120,300, "step: " + str(self.pathIndex))
         self.text_GameOver = Text(width / 2 - WIDTH_BUTTON / 2 + 120,150, "game end!")
         self.button_Back = Button(width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingMap(screen_manager), isCircle= True, image_path= BUTTON_BACK) 
-        self.button_Play = Button(width / 2 - WIDTH_BUTTON / 2, 310, WIDTH_BUTTON, HEIGHT_BUTTON, 'PLAY', command=Command_Play(self))
-        self.button_Next = Button(width / 2 - WIDTH_BUTTON / 2, 310 + VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'NEXT', command= Command_NextMove(self))
-        self.button_Previous = Button(width / 2 - WIDTH_BUTTON / 2, 310 + 2 * VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'PREVIOUS', command=Command_PreviousMove(self))
+        self.button_Play = Button(width / 2 - WIDTH_BUTTON / 2, 360, WIDTH_BUTTON, HEIGHT_BUTTON, 'PLAY', command=Command_Play(self))
+        self.button_Next = Button(width / 2 - WIDTH_BUTTON / 2, 360 + VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'NEXT', command= Command_NextMove(self))
+        self.button_Previous = Button(width / 2 - WIDTH_BUTTON / 2, 360 + 2 * VSPACE, WIDTH_BUTTON, HEIGHT_BUTTON, 'PREVIOUS', command=Command_PreviousMove(self))
         self.map_view = map_view
-        self.pathIndex = 0
+
         self.is_playing = False
     def draw(self, screen):
         sidebar_rect = pygame.Rect(0, 0, self.width, self.height)
         pygame.draw.rect(screen, self.color, sidebar_rect)
+        self.text_Step.draw(screen)
         if self.screen_manager.choosinglevel_screen.currentLevel >= 2:
             self.text_Time.draw(screen)
             if self.screen_manager.choosinglevel_screen.currentLevel>= 3:
@@ -67,5 +70,5 @@ class Sidebar:
                     self.map_view.draw_line(agent.path[agent.pathIndex][0], agent.path[agent.pathIndex][1], agent)
         if self.pathIndex != self.map_view.agents[0].numberSteps:
             self.pathIndex += 1
-
+            self.text_Step.update_text("step: " + str(self.pathIndex))
 

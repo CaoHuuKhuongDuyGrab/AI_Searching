@@ -45,6 +45,8 @@ class Command_PreviousMove(Command):
                 self.sidebar.map_view.remove_line(agent)
         if self.sidebar.pathIndex > 0:
             self.sidebar.pathIndex -= 1
+            self.sidebar.text_Step.update_text("step: " + str(self.sidebar.pathIndex))
+
 
 
 

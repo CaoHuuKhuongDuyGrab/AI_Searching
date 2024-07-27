@@ -12,7 +12,7 @@ BLUE = (34, 70, 120)
 LIGHT_GREEN = (173, 255, 219, 0)
 LIGHT_ORANGE = (255, 192, 153)
 LIGHT_PURPLE = (198, 164, 252)
-LIGHT_BLUE1 = (83, 80, 250)
+NAVY_GREEN = (102, 153, 0)
 HEAVY_BROWN = (125, 26, 26)
 GREY = (169, 169, 169)
 PINK_PINK=  (175, 0, 196)
@@ -27,7 +27,7 @@ NAVY_BLUE = (16, 44, 82)
 BORDER_COLOR = (0, 0, 0)  
 PINK = (252, 182, 214)
 YELLOW = (230, 207, 108)
-AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, LIGHT_BLUE1, HEAVY_BROWN, GREY, PINK_PINK, RED, BLUE_1, GREEN]
+AGENTS_COLOUR = [LIGHT_GREEN, LIGHT_ORANGE, LIGHT_PURPLE, NAVY_GREEN, HEAVY_BROWN, GREY, PINK_PINK, RED, BLUE_1, GREEN]
 
 
 
@@ -63,6 +63,9 @@ class MapView:
         self.agents = []
         self.solution_path = solution_path
         self.update_agents()
+        # self.coord_agent_map = {}  # Track the most recent agent for each coordinate
+        self.line_order = [] 
+
         # print(self.solution_path)
     def draw_map(self):
         self.map_surface.fill(WHITE)  
@@ -112,12 +115,39 @@ class MapView:
                 image = pygame.transform.scale(image, (self.grid_x -1, self.grid_y - 1))
                 image_rect = image.get_rect(center=rect.center)
                 self.map_surface.blit(image, image_rect)
-        for agent in self.agents:
-            if agent.path != None and agent.path != -1:
-                for start, end in agent.lines:
-                    # print(agent.lines)
-                    # print(agent.name, agent.colour)
-                    pygame.draw.line(self.map_surface, agent.colour, start, end, 4)
+
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================               
+        # for agent in self.agents:
+        #     if agent.path != None and agent.path != -1:
+        #         for start, end in agent.lines:
+        #             pygame.draw.line(self.map_surface, agent.colour, start, end, 4)
+
+
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+
+        # lines_to_draw = []
+        # for agent in self.agents:
+        #     if agent.path not in [None, '-1']:
+        #         for i, (start, end) in enumerate(agent.lines):
+        #             lines_to_draw.append((start, end, agent.colour, i))
+        # lines_to_draw.sort(key=lambda x: x[3])
+
+        # for start, end, colour, _ in lines_to_draw:
+        #     pygame.draw.line(self.map_surface, colour, start, end,30)
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+
+        for (start, end, colour) in self.line_order:
+            pygame.draw.line(self.map_surface, colour, start, end, 4)
+
 
         self.screen.blit(self.map_surface, (self.x, self.y))
 
@@ -130,10 +160,37 @@ class MapView:
         end_pos = (end_grid[1] * self.grid_x + self.grid_x // 2, end_grid[0] * self.grid_y + self.grid_y // 2)
         agent.lines.append((start_pos, end_pos))
         agent.pathIndex += 1
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+        # self.coord_agent_map[start_grid] = agent
+        # self.coord_agent_map[end_grid] = agent
+
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+        self.line_order.append((start_pos, end_pos, agent.colour))
+
     def remove_line(self, agent):
+        # if agent.lines:
+        #     agent.lines.pop()
+        #     agent.pathIndex -= 1
         if agent.lines:
-            agent.lines.pop()
+            last_line = agent.lines.pop()
+            start_pos, end_pos = last_line
             agent.pathIndex -= 1
+
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+#========================================================================================================
+            # for coord in [start_pos, end_pos]:
+            #     if self.coord_agent_map.get(coord) == agent:
+            #         del self.coord_agent_map[coord]   
+            self.line_order = [(start, end, colour) for (start, end, colour) in self.line_order if not (start == start_pos and end == end_pos)]
+                    
     def update_agents(self):
         for x in range (len(self.map_data)):
             for y in range (len(self.map_data[0])):
@@ -149,10 +206,3 @@ class MapView:
                     else:
                         agent = Agent(AGENTS_COLOUR[agent_index], '-1', agent_name)
                     self.agents.append(agent)
-        #     for i in range (self.number_agents):        
-        #         if i < len(self.solution_path):
-        #             agent = Agent(AGENTS_COLOUR[i], self.solution_path[i])
-        #             agent.name = 'S'
-        #             if i != 0:
-        #                 agent.name += str(i)
-        #             self.agents.append(agent)

@@ -7,7 +7,7 @@ from test_case.read import *
 from .components.map_view import MapView
 from .components.sidebar import Sidebar
 from .components.button import Text, Button
-from ultils import parse_path, generate_inputfile_path
+from ultils import parse_path, generate_inputfile_path, extend_paths
 from .command import Command_StartGame, Command_BackMenu, Command_EnterMap, Command_EnterCreditScreen, Command_BackChoosingMap, Command_StartChoosingAlgorithm, Command_ChoosingLevel
 
 BUTTON_BACK = './gui/assets/back2.png'
@@ -113,6 +113,7 @@ class GameScreen(Screen):
             self.n, self.m, self.t, self.f, self.map_data, self.number_agents = read_input(self.screen_manager.choosingmap_screen.input_map, self.screen_manager.choosinglevel_screen.currentLevel)
             self.paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
             # print(self.paths)
+            self.paths = extend_paths(self.paths)
             self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths, screen_manager=self.screen_manager)
             # self.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, self.map_data, self.number_agents, solution_path=self.paths)
             self.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.map_view, self.screen_manager, self.t, self.f)
@@ -217,6 +218,7 @@ class ChoosingMapScreen(Screen):
                             self.input_map = generate_inputfile_path(self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingmap_screen.currentMap)
                             n, m, t, f, map_data, number_agents = read_input(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel)
                             paths = parse_path(self.input_map, self.screen_manager.choosinglevel_screen.currentLevel, self.screen_manager.choosingalgorithm_screen.currentAlgorithm)
+                            paths = extend_paths(paths)
                             self.screen_manager.game_screen.map_view = MapView(self.screen, SIDEBAR_WIDTH, 0, MAP_WIDTH, MAP_HEIGHT, map_data, number_agents, solution_path=paths, screen_manager=self.screen_manager)
                             self.screen_manager.game_screen.sidebar = Sidebar(SIDEBAR_WIDTH, SIDEBAR_HEIGHT, self.screen_manager.game_screen.map_view, self.screen_manager, t, f)
                         button.command.execute()
