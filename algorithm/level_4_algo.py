@@ -64,7 +64,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                     self.distance[destination_index][next_x][next_y][new_time][new_fuel] = new_distance
                     queue.append((new_distance, next_x, next_y, new_time, new_fuel))
 
-    def get_next_state(self, state, agent_index):
+    def get_next_state(self, state, agent_index, current_time):
 
         min_distance = oo
         next_move = None
@@ -79,7 +79,14 @@ class Multiple_Agent_Algorithm(Algorithm):
             next_x, next_y = next_state[0], next_state[1]
             next_time = next_state[2]
             next_fuel = next_state[3]
-            if self.map.strongest_agent_can_pass(next_x, next_y) < agent_index:
+            # if self.map.strongest_agent_can_pass(next_x, next_y) < agent_index:
+            #     continue
+            can_go = True
+            for i in range(agent_index):
+                if self.path[i][current_time][0] == next_x and self.path[i][current_time][1] == next_y:
+                    can_go = False
+                    break
+            if can_go == False:
                 continue
             if self.distance[agent_index][next_x][next_y][next_time][next_fuel] < min_distance:
                 min_distance = self.distance[agent_index][next_x][next_y][next_time][next_fuel]
@@ -90,7 +97,7 @@ class Multiple_Agent_Algorithm(Algorithm):
             if agent_index == 2:
                 pass
             if _time - 1 < 0: 
-                raise Exception(f"Agent index: {agent_index} got the Time problem")
+                # raise Exception(f"Agent index: {agent_index} got the Time problem")
                 return
             self.path[agent_index].append((source[0], source[1], _time - 1, fuel))
             return
@@ -165,7 +172,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                     return
             for index in range(self.num_agents):
                 if cnt_time + 1 == len(self.path[index]):
-                    self.get_next_state(self.path[index][-1], index)
+                    self.get_next_state(self.path[index][-1], index, cnt_time + 1)
                     if index == 2:
                         print(self.path[index][-1], len(self.path[index]))
             if self.update_map(cnt_time) == True:
