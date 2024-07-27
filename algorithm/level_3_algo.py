@@ -24,7 +24,8 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
             if self.map.cell_type(current_x, current_y) == DESTINATION and current_time <= self.map.time_commitment:
                 # print(f"Destination found at ({current_x}, {current_y}) with Time: {current_time}, Fuel: {current_fuel}, Distance: {dist}")
                 return
-
+            if self.distance[current_x][current_y][current_time][current_fuel] < dist:
+                continue
             next_moves = self.map.next_move(current_x, current_y)
 
             for next_move in next_moves:
@@ -45,7 +46,7 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
 
                 new_fuel = current_fuel - 1
                 if cell_type == GAS_STATION:
-                    new_fuel = self.map.fuel
+                    new_fuel = self.map.fuel - 1
                     fuel_time = int(self.map.matrix[current_x][current_y][1:])
                     
                 new_time = current_time + move_time + fuel_time

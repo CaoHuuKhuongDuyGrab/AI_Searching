@@ -20,7 +20,8 @@ class BFS_With_Time_Constrain(Algorithm):
             dist, current_x, current_y, current_time = queue.popleft()
             if self.map.cell_type(current_x, current_y) == DESTINATION and current_time <= self.map.time_commitment:
                 return
-
+            if self.distance[current_x][current_y][current_time] < dist:
+                continue
             next_moves = self.map.next_move(current_x, current_y)
 
             for next_move in next_moves:

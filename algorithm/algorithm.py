@@ -6,6 +6,7 @@ class Algorithm:
         self.trace = None
         self.distance = None
         self.algorithm_name = algorithm_name
+        self.num_agents = 1
 
     def run(self):
         self.trace = [[None for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows)]
