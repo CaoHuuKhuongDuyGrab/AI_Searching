@@ -46,7 +46,7 @@ class Multiple_Agent_Algorithm(Algorithm):
         return next_states
 
     def get_heuristic(self, state, source_index):
-        # debug = (destination_index == 1)
+        debug = (state == (1, 5, 15, 1) and source_index == 0)
         self.distance = [[[[oo for _ in range(self.map.fuel + 1)] for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows)]
 
         for x in range(self.map.num_rows):
@@ -98,6 +98,11 @@ class Multiple_Agent_Algorithm(Algorithm):
                     self.distance[next_x][next_y][new_time][new_fuel] = new_distance
                     queue.append((new_distance, next_x, next_y, new_time, new_fuel))
         res = oo
+        if debug:
+            print("debug destination")
+            print(self.map.get_destinations())
+            print(self.map.get_order_cell(4, 5, True))
+            print("End debug")
         for destination in self.map.get_destinations():
             if self.map.get_order_cell(destination[0], destination[1]) == source_index:
                 for time_commitment in range(self.map.time_commitment + 1):
@@ -113,7 +118,7 @@ class Multiple_Agent_Algorithm(Algorithm):
         next_states = self.get_next_state_all(state, agent_index)
         # print(next_states)
         # print("hello")
-        debug = (agent_index == 2 and current_time == 7)
+        debug = (agent_index == 0 and current_time == 15)
         if debug:
             print(f"Current state: {state}")
             print(self.get_next_state_all(state, agent_index, True))
@@ -121,9 +126,10 @@ class Multiple_Agent_Algorithm(Algorithm):
             can_move = True
             if debug:
                 print(f"Next state: {next_state}")
-            for agent in range(agent_index):
+                print(f"Value: {self.get_heuristic(next_state, agent_index)}")
+            for agent in range(self.num_agents):
                 try:
-                    if self.path[agent][current_time][0] == next_state[0] and self.path[agent][current_time][1] == next_state[1]:
+                    if agent < agent_index and self.path[agent][current_time][0] == next_state[0] and self.path[agent][current_time][1] == next_state[1]:
                         can_move = False
                     if current_time > 0:
                         if self.path[agent][current_time - 1][0] == next_state[0] and self.path[agent][current_time - 1][1] == next_state[1]:
@@ -166,61 +172,76 @@ class Multiple_Agent_Algorithm(Algorithm):
     def update_map(self, current_time):
         sources = self.map.get_sources()
         destinations = self.map.get_destinations()
+        debug = (current_time == 2)
+
         done = [False for _ in range(self.num_agents)]
+
         for agent_index, source in enumerate(sources):
             if self.map.cell_type(source[0], source[1]) == DESTINATION and self.map.get_order_cell(source[0], source[1]) == agent_index:
-                done[agent_index] = True
+                self.map.matrix[source[0]][source[1]] = "0"
+                self.map.origin_map.matrix[source[0]][source[1]] = "0"
             self.map.matrix[source[0]][source[1]] = self.map.origin_map.matrix[source[0]][source[1]]
+ 
         for agent_index in range(self.num_agents):
             source = self.path[agent_index][current_time]
+            if self.map.cell_type(source[0], source[1]) == DESTINATION and self.map.get_order_cell(source[0], source[1]) == agent_index:
+                done[agent_index] = True
             self.map.matrix[source[0]][source[1]] = "S"
+            # if debug:
+            #     print(source)
             if agent_index > 0:
                 self.map.matrix[source[0]][source[1]] += str(agent_index)
                 if done[agent_index]:
+                    print(f"Agent {agent_index} reached the goal at time {current_time}")
                     random_cell = self.map.get_valid_cell()
                     self.map.matrix[random_cell[0]][random_cell[1]] = "F" + str(agent_index)
-                    self.add_destination(random_cell, agent_index)
+                    self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "F" + str(agent_index)
+                    done[agent_index] = False
+                    # self.add_destination(random_cell, agent_index)
             elif done[0] == True :
                 return True
         self.map.list_matrix.append(self.map.matrix)
-
-
 
     def solve(self):
         sources = self.map.get_sources()
         destinations = self.map.get_destinations()
         self.num_agents = len(sources)
-        # self.distance = [[[[[oo for _ in range(self.map.fuel + 1)] for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows)] for _ in range(self.num_agents)]
-        # self.trace = [[[[[[] for _ in range(self.map.fuel + 1)] for _ in range(self.map.time_commitment + 1)] for _ in range(self.map.num_cols)] for _ in range(self.map.num_rows)] for _ in range(self.num_agents)]
-        # for index, destination in enumerate(destinations):
-        #     self.add_destination(destination, index)
-            # print(self.distance[0][1][1][20][10])
-            # return
-        # print(self.distance[0])
-        # print(self.trace[0][1][1][20][4])
-        # return
 
         self.path = [[] for i in range(self.num_agents)]
         for index, source in enumerate(sources):
             self.path[index].append((source[0], source[1], 0, self.map.fuel))
 
         cnt_time = 0
-        while True:
-            for i in range(self.num_agents):
-                if len(self.path[i]) <= cnt_time:
-                    return
-            for index in range(self.num_agents):
-                # print(cnt_time, self.path[index])
-                if cnt_time + 1 == len(self.path[index]):
-                    self.get_next_state(self.path[index][-1], index, cnt_time + 1)
-                    # if index == 2:
-                    #     print(self.path[index][-1], len(self.path[index]))
-            if self.update_map(cnt_time) == True:
-                print("Reached the goal")
-                return
-            cnt_time += 1
-            print(cnt_time)
-            self.map.print_2d_array()
+        try:
+            while True:
+                for i in range(self.num_agents):
+                    if len(self.path[i]) <= cnt_time:
+                        break
+                
+                for index in range(self.num_agents):
+                    # print(cnt_time, self.path[index])
+                    if cnt_time + 1 == len(self.path[index]):
+                        self.get_next_state(self.path[index][-1], index, cnt_time + 1)
+                        # if index == 2:
+                        #     print(self.path[index][-1], len(self.path[index]))
+                cnt_time += 1
+                if cnt_time >= self.map.time_commitment:
+                    print("Time out")
+                    break
+                
+                print(cnt_time)
+                if self.update_map(cnt_time) == True:
+                    print("Reached the goal")
+                    break
+                
+                self.map.print_2d_array()
+                
+                # for i in range(self.num_agents):
+                #     print(f"Agent {i}: {self.path[i]}")
+        except :
+            print(f"Error at time {cnt_time}")
+            # print(e)
+        print("ENDDD")
 
     def get_trace(self):
         if self.path == None:

@@ -35,7 +35,7 @@ def main():
         screen_manager.draw()
     pygame.quit()
 if __name__ == "__main__":
-    # _map = Map("test_case/level4/test1.txt")
+    # _map = Map("test_case/level4/test2.txt")
     # level = Level4(_map)
     # print(level.run())
     # level = Level3(_map)

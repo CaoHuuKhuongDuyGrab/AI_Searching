@@ -20,6 +20,7 @@ class Map:
         self.list_matrix = []
         if file_path is not None:
             self.load_map(file_path)
+        self.name = "main"
     
     def inside(self, row, col):
         if row < 0 or row >= self.num_rows or col < 0 or col >= self.num_cols:
@@ -44,12 +45,13 @@ class Map:
         for i in range(self.num_rows):
             tmp = []
             for j in range(self.num_cols):
-                if self.cell_type(i, j) == SOURCE or self.cell_type(i, j) == DESTINATION:
+                if self.cell_type(i, j) == SOURCE:
                     tmp.append('0')
-                tmp.append(self.matrix[i][j])
+                else: tmp.append(self.matrix[i][j])
             tmp_matrix.append(tmp)
         self.origin_map = copy.deepcopy(self)  
         self.origin_map.matrix = tmp_matrix
+        self.origin_map.name = "origin"
         self.list_matrix.append(self.matrix)
     
     def get_list_matrix(self):
@@ -64,9 +66,16 @@ class Map:
         random_cell = random.choice(valid_cells)
         return random_cell
 
-    def get_order_cell(self, row, col):
+    def get_order_cell(self, row, col, debug = False):
+        if self.name == "main" and (self.origin_map.cell_type(row, col) == DESTINATION or self.origin_map.cell_type(row, col) == GAS_STATION):
+            if len(self.origin_map.matrix[row][col]) == 1:
+                return 0
+            # if debug:
+            #     print(f"Debug {self.matrix[row][col]}")
+            return int(self.origin_map.matrix[row][col][1:])
         if self.cell_type(row, col) != SOURCE and self.cell_type(row, col) != DESTINATION and self.cell_type(row, col) != GAS_STATION:
             return -1
+        
         if len(self.matrix[row][col]) == 1:
             return 0
         return int(self.matrix[row][col][1:])
@@ -84,9 +93,9 @@ class Map:
         destinations = []
         for i in range(self.num_rows):
             for j in range(self.num_cols):
-                if self.cell_type(i, j) == DESTINATION:
+                if self.origin_map.cell_type(i, j) == DESTINATION:
                     destinations.append((i, j))
-        destinations.sort(key = lambda x: self.get_order_cell(x[0], x[1]))
+        destinations.sort(key = lambda x: self.origin_map.get_order_cell(x[0], x[1]))
         return destinations
     
     def strongest_agent_can_pass(self, row, col):
