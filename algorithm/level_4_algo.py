@@ -1,6 +1,7 @@
 from algorithm.algorithm import Algorithm
 from config.global_var import *
 from collections import deque
+import copy
 
 debug = False
 
@@ -202,15 +203,17 @@ class Multiple_Agent_Algorithm(Algorithm):
                         print(f"Agent {agent_index} reached the goal at time {current_time}")
                         random_cell = self.map.get_valid_cell()
                         print(f"New destination for agent {agent_index}: {random_cell}")
-                        self.map.matrix[random_cell[0]][random_cell[1]] = "F" + str(agent_index)
-                        self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "F" + str(agent_index)
+                        self.map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
+                        self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
                         self.map.origin_map.matrix[source[0]][source[1]] = "0"
                         done[agent_index] = False
                         # self.add_destination(random_cell, agent_index)
         except:
             print(f"Sai o dau do{current_time}")
             # print(e)
-        self.map.list_matrix.append(self.map.matrix)
+        # self.map.list_matrix.append(self.map.matrix)
+        # deepcopy_matrix = copy.deepcopy(self.map.matrix)
+        self.map.list_matrix.append(copy.deepcopy(self.map.matrix))
         if done[0] == True:                      
             return True
         
@@ -237,8 +240,6 @@ class Multiple_Agent_Algorithm(Algorithm):
                         self.get_next_state(self.path[index][-1], index, cnt_time)
                         # if index == 2:
                         #     print(self.path[index][-1], len(self.path[index]))
-                
-                
                 
                 print(cnt_time)
                 if self.update_map(cnt_time) == True:

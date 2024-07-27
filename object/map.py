@@ -52,7 +52,7 @@ class Map:
         self.origin_map = copy.deepcopy(self)  
         self.origin_map.matrix = tmp_matrix
         self.origin_map.name = "origin"
-        self.list_matrix.append(self.matrix)
+        self.list_matrix.append(copy.deepcopy(self.matrix))
     
     def get_list_matrix(self):
         return self.list_matrix
@@ -142,3 +142,4 @@ class Map:
             print(" ".join(f"{elem:5}" for elem in row))
         print()
         print("================================")
+        # self.list_matrix.append(self.matrix)

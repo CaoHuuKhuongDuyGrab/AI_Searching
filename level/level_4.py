@@ -14,3 +14,5 @@ class Level4(Level):
         print(len(self.map.get_list_matrix()))
         print(len(path[0]))
         return (path, self.map.get_list_matrix())
+        # print(self.map.get_list_matrix())
+        # return path
