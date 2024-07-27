@@ -182,7 +182,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                     self.add_destination(random_cell, agent_index)
             elif done[0] == True :
                 return True
-        self.list_matrix.append(self.map.matrix)
+        self.map.list_matrix.append(self.map.matrix)
 
 
 
@@ -225,5 +225,11 @@ class Multiple_Agent_Algorithm(Algorithm):
     def get_trace(self):
         if self.path == None:
             return -1
-        return self.path
+        trace_path = []
+        for i in range(self.num_agents):
+            trace_path.append([])
+            for j in range(len(self.path[i])):
+                trace_path[i].append(self.path[i][j][:2])
+        print(trace_path)
+        return trace_path
             
