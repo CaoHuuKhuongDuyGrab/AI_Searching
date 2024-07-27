@@ -11,4 +11,6 @@ class Level4(Level):
         algorithm = Multiple_Agent_Algorithm(self.map)
         algorithm.run()
         path = algorithm.get_trace()
-        return path
+        print(len(self.map.get_list_matrix()))
+        print(len(path[0]))
+        return (path, self.map.get_list_matrix())

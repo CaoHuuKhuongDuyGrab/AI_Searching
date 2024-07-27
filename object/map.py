@@ -61,7 +61,7 @@ class Map:
         valid_cells = []
         for i in range(self.num_rows):
             for j in range(self.num_cols):
-                if self.origin_map.cell_type(i, j) != WALL:
+                if self.origin_map.cell_type(i, j) == NORMAL_CELL:
                     valid_cells.append((i, j))
         random_cell = random.choice(valid_cells)
         return random_cell
