@@ -23,7 +23,7 @@ class Sidebar:
         self.screen_manager = screen_manager
         self.pathIndex = 0
         self.text_Time = Text(width / 2 - WIDTH_BUTTON / 2 + 120,200, "time: " + str(self.time))
-        self.text_Fuel = Text(width / 2 - WIDTH_BUTTON / 2 + 120,250, "tuel: " + str(self.fuel))
+        self.text_Fuel = Text(width / 2 - WIDTH_BUTTON / 2 + 120,250, "fuel: " + str(self.fuel))
         self.text_Step = Text(width / 2 - WIDTH_BUTTON / 2 + 120,300, "step: " + str(self.pathIndex))
         self.text_GameOver = Text(width / 2 - WIDTH_BUTTON / 2 + 120,150, "game end!")
         self.button_Back = Button(width / 2 - WIDTH_BUTTON / 2 + 10, 50 , WIDTH_BUTTON, HEIGHT_BUTTON, 'BACK', command=Command_BackChoosingMap(screen_manager), isCircle= True, image_path= BUTTON_BACK) 
