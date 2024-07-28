@@ -39,8 +39,8 @@ if __name__ == "__main__":
     with open("algorithm/new_des.txt", "w") as f:
         pass
     # ==================== 
-    # _map = Map("test_case/level4/test1.txt")
-    # level = Level4(_map)
+    # _map = Map("test_case/level4/test2.txt")
+    # level = Level3(_map)
     # print(level.run())
     # level = Level3(_map)
     # print(level.run())
