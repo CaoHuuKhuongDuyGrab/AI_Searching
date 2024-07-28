@@ -1,2 +1,7 @@
-pygame
 pygame_widgets
+pygame
+abc
+deque
+random
+copy
+heapq

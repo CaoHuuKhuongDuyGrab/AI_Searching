@@ -77,10 +77,10 @@ class BFS_With_Time_Fuel_Constrain(Algorithm):
                     _fuel = fuel
         
         if _time == None:
-            print("Time problem !")
+            # print("Time problem !")
             return -1
         if _fuel == None:
-            print("Fuel problem !")
+            # print("Fuel problem !")
             return -1
         
         # goal state (x, y, _time)

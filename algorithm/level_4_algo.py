@@ -29,7 +29,8 @@ class Multiple_Agent_Algorithm(Algorithm):
             move_time = 1
             fuel_time = 0
             if debug:
-                print(f"Cell type: {cell_type} {self.map.matrix[current_x][current_y]}")
+                # print(f"Cell type: {cell_type} {self.map.matrix[current_x][current_y]}")
+                pass
             if cell_type == TOOL_BOOTH:
                 move_time += current_map.get_cell_value(current_x, current_y)
 
@@ -107,16 +108,17 @@ class Multiple_Agent_Algorithm(Algorithm):
                         res = min(res, self.distance[destination[0]][destination[1]][time_commitment][fuel])
         # print(state, res, source_index)
         if debug:
-            print("debug destination")
-            # print(self.map.origin_map.cell_type(6, 2))
-            # print(self.map.origin_map.matrix[6][2])
-            print(self.distance[7][2][8][2])
-            print(self.distance[6][2][9][1])
-            print(self.distance[6][1][10][9])
-            print(res)
-            # print(self.map.get_destinations())
-            # print(self.map.get_order_cell(4, 5, True))
-            print("End debug") 
+            # print("debug destination")
+            # # print(self.map.origin_map.cell_type(6, 2))
+            # # print(self.map.origin_map.matrix[6][2])
+            # print(self.distance[7][2][8][2])
+            # print(self.distance[6][2][9][1])
+            # print(self.distance[6][1][10][9])
+            # print(res)
+            # # print(self.map.get_destinations())
+            # # print(self.map.get_order_cell(4, 5, True))
+            # print("End debug") 
+            pass
         return res
 
     def get_next_state(self, state, agent_index, current_time):
@@ -128,13 +130,15 @@ class Multiple_Agent_Algorithm(Algorithm):
         # print("hello")
         debug = (agent_index == 1 and current_time == 7)
         if debug:
-            print(f"Current state: {state}")
-            print(self.get_next_state_all(state, agent_index, True))
+            # print(f"Current state: {state}")
+            # print(self.get_next_state_all(state, agent_index, True))
+            pass
         for next_state in next_states:
             can_move = True
             if debug:
-                print(f"Next state: {next_state}")
-                print(f"Value: {self.get_heuristic(next_state, agent_index)}")
+                # print(f"Next state: {next_state}")
+                # print(f"Value: {self.get_heuristic(next_state, agent_index)}")
+                pass
             for agent in range(self.num_agents):
                 try:
                     if agent < agent_index and self.path[agent][current_time][0] == next_state[0] and self.path[agent][current_time][1] == next_state[1]:
@@ -154,7 +158,8 @@ class Multiple_Agent_Algorithm(Algorithm):
                 min_distance = heuristic
                 next_best_state = next_state
         if debug:
-            print(f"Best state {next_best_state}")
+            # print(f"Best state {next_best_state}")
+            pass
         if next_best_state == None:
             if state[2] + 1 > self.map.time_commitment:
                 return
@@ -200,9 +205,9 @@ class Multiple_Agent_Algorithm(Algorithm):
                 if agent_index > 0:
                     self.map.matrix[source[0]][source[1]] += str(agent_index)
                     if done[agent_index]:
-                        print(f"Agent {agent_index} reached the goal at time {current_time}")
+                        # print(f"Agent {agent_index} reached the goal at time {current_time}")
                         random_cell = self.map.get_valid_cell()
-                        print(f"New destination for agent {agent_index}: {random_cell}")
+                        # print(f"New destination for agent {agent_index}: {random_cell}")
                         self.map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
                         self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
                         self.map.origin_map.matrix[source[0]][source[1]] = "0"
@@ -210,8 +215,9 @@ class Multiple_Agent_Algorithm(Algorithm):
                         fo.write(f"{current_time} {random_cell[0]} {random_cell[1]} G{agent_index}\n")
                         # self.add_destination(random_cell, agent_index)
         except:
-            print(f"Sai o dau do{current_time}")
+            # print(f"Sai o dau do{current_time}")
             # print(e)
+            pass
         # self.map.list_matrix.append(self.map.matrix)
         # deepcopy_matrix = copy.deepcopy(self.map.matrix)
         self.map.list_matrix.append(copy.deepcopy(self.map.matrix))
@@ -244,21 +250,22 @@ class Multiple_Agent_Algorithm(Algorithm):
                         # if index == 2:
                         #     print(self.path[index][-1], len(self.path[index]))
                 
-                print(cnt_time)
+                # print(cnt_time)
                 if self.update_map(cnt_time, fo) == True:
-                    print("Reached the goal")
+                    # print("Reached the goal")
                     break
                 
-                self.map.print_2d_array()
+                # self.map.print_2d_array()
                 if cnt_time >= self.map.time_commitment:
-                    print("Time out")
+                    # print("Time out")
                     break
                 # for i in range(self.num_agents):
                 #     print(f"Agent {i}: {self.path[i]}")
         except :
-            print(f"Error at time {cnt_time}")
+            # print(f"Error at time {cnt_time}")
             # print(e)
-        print("ENDDD")
+            pass
+        # print("ENDDD")
         fo.close()
 
 
@@ -270,6 +277,6 @@ class Multiple_Agent_Algorithm(Algorithm):
             trace_path.append([])
             for j in range(len(self.path[i])):
                 trace_path[i].append(self.path[i][j][:2])
-        print(trace_path)
+        # print(trace_path)
         return trace_path
             

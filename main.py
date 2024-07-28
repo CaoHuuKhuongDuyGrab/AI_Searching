@@ -39,13 +39,6 @@ if __name__ == "__main__":
     with open("algorithm/new_des.txt", "w") as f:
         pass
     # ==================== 
-    # _map = Map("test_case/level4/test2.txt")
-    # level = Level3(_map)
-    # print(level.run())
-    # level = Level3(_map)
-    # print(level.run())
-    # new_path = convert_tuples_to_strings(path)
-    # print(new_path)
     main()
 
 
