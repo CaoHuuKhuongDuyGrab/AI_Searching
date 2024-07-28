@@ -207,7 +207,7 @@ class Multiple_Agent_Algorithm(Algorithm):
                         self.map.origin_map.matrix[random_cell[0]][random_cell[1]] = "G" + str(agent_index)
                         self.map.origin_map.matrix[source[0]][source[1]] = "0"
                         done[agent_index] = False
-                        fo.write(f"{current_time} {random_cell[0]} {random_cell[1]} {"G" + str(agent_index)}\n")
+                        fo.write(f"{current_time} {random_cell[0]} {random_cell[1]} G{agent_index}\n")
                         # self.add_destination(random_cell, agent_index)
         except:
             print(f"Sai o dau do{current_time}")
