@@ -7,16 +7,22 @@ from level.level_4 import Level4
 
 
 def extend_paths(paths):
-    parsed_paths = [list(map(lambda s: tuple(map(int, s.strip('()').split(','))), path.split(') ('))) for path in paths]
-    max_length = max(len(path) for path in parsed_paths)
     extended_paths = []
-    for path in parsed_paths:
-        if len(path) < max_length:
-            last_coord = path[-1]
-            path.extend([last_coord] * (max_length - len(path)))
-        extended_paths.append(path)
-    extended_paths_str = [' '.join(f'({x},{y})' for (x, y) in path) for path in extended_paths]
-    return extended_paths_str
+    for path in paths:
+        if path == '-1':
+            extended_paths.append('-1')
+            continue
+        
+        parsed_path = list(map(lambda s: tuple(map(int, s.strip('()').split(','))), path.split(') (')))
+        max_length = max(len(parsed_path) for parsed_path in [parsed_path])
+        
+        if len(parsed_path) < max_length:
+            last_coord = parsed_path[-1]
+            parsed_path.extend([last_coord] * (max_length - len(parsed_path)))
+        
+        extended_paths.append(' '.join(f'({x},{y})' for (x, y) in parsed_path))
+    
+    return extended_paths
 
 def read_input(file_name, current_level):
     with open(file_name, 'r') as file:
@@ -72,6 +78,8 @@ def read_input(file_name, current_level):
 
 
 def read_output(coordinates):
+    if str(coordinates) == '-1':
+        return ['-1'], 1
     coord_list = coordinates.strip().split(') ')
     lines = []
     for i in range(len(coord_list) - 1):
@@ -125,6 +133,7 @@ def parse_path(inputfile_path, current_level, algorithm):
     # print(pathReturned)
     # print(pathReturned)
     pathReturned = convert_tuples_to_strings(pathReturned)
+    pathReturned = extend_paths(pathReturned)
     return pathReturned
 
 
